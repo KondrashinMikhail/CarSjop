@@ -11,7 +11,8 @@ import mk.ru.carshop.enums.CriteriaOperations.LESS_THAN_OR_EQUAL
 import mk.ru.carshop.enums.CriteriaOperations.LIKE
 import mk.ru.carshop.enums.CriteriaOperations.NOT_EQUALS
 import mk.ru.carshop.exceptions.ContentNotFoundError
-import mk.ru.carshop.exceptions.SoftDeleteException
+import mk.ru.carshop.exceptions.SellingException
+import mk.ru.carshop.exceptions.SoftDeletionException
 import mk.ru.carshop.mappers.CarMapper
 import mk.ru.carshop.persistence.entities.Car
 import mk.ru.carshop.persistence.repositories.CarRepository
@@ -35,12 +36,15 @@ class CarServiceImpl(
 ) : CarService {
     private final val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun findAll(conditions: List<CommonCondition<Any>>?, pageable: Pageable): Page<CarInfoResponse> {
+    override fun findAll(
+        conditions: List<CommonCondition<Any>>?,
+        pageable: Pageable?
+    ): List<CarInfoResponse> {
         val specification: Specification<Car> = Specification<Car> { root, _, criteriaBuilder ->
             val predicates = mutableListOf<Predicate>()
             conditions?.let {
                 it.forEach { condition ->
-                    val predicateSpecification: PredicateSpecification<Any> = condition.predicateSpecification
+                    val predicateSpecification: PredicateSpecification<Any> = condition.predicateSpecification!!
                     val expression: Expression<Any> = root.get(condition.field)
                     val value = condition.value
                     val predicate: Predicate = when (condition.operation) {
@@ -57,13 +61,13 @@ class CarServiceImpl(
                 criteriaBuilder.and(* predicates.toTypedArray())
             }
         }
-        val cars: Page<Car> = carRepository.findAll(specification, pageable)
-        log.info("Found ${cars.totalElements} of cars ${conditions?.let { "with conditions" }}")
-        return cars.map { carMapper.toInfoResponse(it) }
+        val cars: Page<Car> = carRepository.findAll(specification, pageable ?: Pageable.unpaged())
+        log.info("Found ${cars.totalElements} of cars ${conditions?.let { "with ${it.size} of" } ?: "without"} conditions")
+        return cars.map { carMapper.toInfoResponse(it) }.toList()
     }
 
     override fun findById(id: UUID): CarInfoResponse {
-        val car: Car = findEntityById(id)
+        val car: Car = findEntityById(id = id)
         log.info("Found car with id - $id")
         return carMapper.toInfoResponse(car)
     }
@@ -76,8 +80,7 @@ class CarServiceImpl(
     }
 
     override fun updateCar(updateCarRequest: UpdateCarRequest): CarInfoResponse {
-        val car = findEntityById(updateCarRequest.id)
-
+        val car = findEntityById(id = updateCarRequest.id, deletionCheck = true, soldCheck = true)
         updateCarRequest.manufacturer?.let { car.manufacturer = it }
         updateCarRequest.model?.let { car.model = it }
         updateCarRequest.price?.let { car.price = it }
@@ -88,16 +91,35 @@ class CarServiceImpl(
     }
 
     override fun deleteCar(id: UUID) {
-        val car = findEntityById(id)
-        when (car.isDeleted) {
-            true -> throw SoftDeleteException("Car with id - $id not found")
-            false -> car.isDeleted = true
-        }
+        val car = findEntityById(id = id, deletionCheck = true, soldCheck = true)
+        car.deleted = true
         carRepository.save(car)
         log.info("Deleted car with id - $id")
     }
 
-    private fun findEntityById(id: UUID): Car {
-        return carRepository.findById(id).orElseThrow { ContentNotFoundError("Car with id - $id not found") }
+    override fun restoreCar(id: UUID) {
+        val car = findEntityById(id = id)
+        when (car.deleted) {
+            true -> car.deleted = false
+            false -> throw SoftDeletionException("Car with id - $id is not deleted")
+        }
+        carRepository.save(car)
+        log.info("Restored car with id - $id")
+    }
+
+    override fun sellCar(id: UUID) {
+        val car: Car = findEntityById(id = id, deletionCheck = true, soldCheck = true)
+        car.sold = true
+        carRepository.save(car)
+        log.info("Sold car with id - $id")
+    }
+
+    private fun findEntityById(id: UUID, deletionCheck: Boolean = false, soldCheck: Boolean = false): Car {
+        val car: Car = carRepository.findById(id).orElseThrow { ContentNotFoundError("Car with id - $id not found") }
+        if (car.deleted && deletionCheck)
+            throw SoftDeletionException("Car with id - $id not found")
+        if (car.sold && soldCheck)
+            throw SellingException("Car with id - $id is sold")
+        return car
     }
 }

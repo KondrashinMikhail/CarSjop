@@ -21,8 +21,9 @@ class CarMapper {
             manufacturer = car.manufacturer!!,
             model = car.model!!,
             registrationDate = car.registrationDate,
-            isDeleted = car.isDeleted,
-            price = car.price!!
+            deleted = car.deleted,
+            sold = car.sold,
+            price = car.price!!,
         )
     }
 
