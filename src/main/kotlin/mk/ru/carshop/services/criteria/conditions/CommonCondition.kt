@@ -25,5 +25,5 @@ abstract class CommonCondition<T>(
     open val operation: CriteriaOperations,
     open val value: T,
     @JsonIgnore
-    open val predicateSpecification: PredicateSpecification<T>?
+    open val predicateSpecification: PredicateSpecification<T>
 )

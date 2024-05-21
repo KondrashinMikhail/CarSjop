@@ -7,6 +7,7 @@ import mk.ru.carshop.web.requests.CreateCarRequest
 import mk.ru.carshop.web.requests.UpdateCarRequest
 import mk.ru.carshop.web.responses.CarInfoResponse
 import mk.ru.carshop.web.responses.CreateCarResponse
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -25,8 +27,8 @@ class CarController(private val carService: CarService) {
     @PostMapping("/find")
     fun findAll(
         @RequestBody(required = false) conditions: List<CommonCondition<Any>>?,
-        pageable: Pageable?
-    ): ResponseEntity<List<CarInfoResponse>> {
+        @RequestParam(required = false) pageable: Pageable?
+    ): ResponseEntity<Page<CarInfoResponse>> {
         return ResponseEntity.ok(carService.findAll(conditions = conditions, pageable = pageable))
     }
 
