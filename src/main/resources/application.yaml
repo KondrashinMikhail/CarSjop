@@ -1,0 +1,23 @@
+server:
+  port: ${APP_PORT:8085}
+spring:
+  application:
+    name: ${APP_NAME:CarShop}
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    open-in-view: false
+  output:
+    ansi:
+      enabled: always
+metadata:
+  name: ${spring.application.name}
+  version: ${APP_VERSION:1.0}
+  spring-version: ${spring-boot.formatted-version}
