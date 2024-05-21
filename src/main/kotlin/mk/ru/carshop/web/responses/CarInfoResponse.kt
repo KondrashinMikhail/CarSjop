@@ -1,12 +1,14 @@
 package mk.ru.carshop.web.responses
 
-import java.time.LocalDateTime
-import java.util.*
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.util.UUID
 
 data class CarInfoResponse(
     val id: UUID,
     val manufacturer: String,
     val model: String,
-    val creationDateTime: LocalDateTime,
-    val isDeleted: Boolean
+    val registrationDate: LocalDate,
+    val isDeleted: Boolean,
+    val price: BigDecimal
 )

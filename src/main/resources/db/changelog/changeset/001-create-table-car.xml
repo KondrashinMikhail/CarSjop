@@ -20,10 +20,13 @@
             <column name="model" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="creation_date_time" type="datetime">
+            <column name="registration_date" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="is_deleted" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="numeric">
                 <constraints nullable="false"/>
             </column>
         </createTable>

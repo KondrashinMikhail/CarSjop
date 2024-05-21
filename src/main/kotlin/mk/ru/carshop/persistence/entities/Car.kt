@@ -3,8 +3,10 @@ package mk.ru.carshop.persistence.entities
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import java.time.LocalDateTime
+import java.math.BigDecimal
+import java.time.LocalDate
 import java.util.UUID
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UuidGenerator
 
 @Entity
@@ -16,8 +18,11 @@ data class Car(
     var manufacturer: String? = null,
     @Column(nullable = false)
     var model: String? = null,
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    var registrationDate: LocalDate = LocalDate.now(),
     @Column(nullable = false)
-    var creationDateTime: LocalDateTime = LocalDateTime.now(),
+    var isDeleted: Boolean = false,
     @Column(nullable = false)
-    var isDeleted: Boolean = false
+    var price: BigDecimal? = null
 )

@@ -1,4 +1,4 @@
-package mk.ru.carshop.conversion
+package mk.ru.carshop.mappers
 
 import mk.ru.carshop.persistence.entities.Car
 import mk.ru.carshop.web.requests.CreateCarRequest
@@ -11,7 +11,7 @@ class CarMapper {
     fun toCreateResponse(car: Car): CreateCarResponse {
         return CreateCarResponse(
             id = car.id!!,
-            creationDateTime = car.creationDateTime
+            registrationDate = car.registrationDate
         )
     }
 
@@ -20,15 +20,17 @@ class CarMapper {
             id = car.id!!,
             manufacturer = car.manufacturer!!,
             model = car.model!!,
-            creationDateTime = car.creationDateTime,
-            isDeleted = car.isDeleted
+            registrationDate = car.registrationDate,
+            isDeleted = car.isDeleted,
+            price = car.price!!
         )
     }
 
     fun toEntity(car: CreateCarRequest): Car {
         return Car(
             manufacturer = car.manufacturer,
-            model = car.model
+            model = car.model,
+            price = car.price
         )
     }
 }

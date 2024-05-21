@@ -2,6 +2,7 @@ package mk.ru.carshop.web.controllers
 
 import java.util.UUID
 import mk.ru.carshop.services.car.CarService
+import mk.ru.carshop.services.criteria.conditions.CommonCondition
 import mk.ru.carshop.web.requests.CreateCarRequest
 import mk.ru.carshop.web.requests.UpdateCarRequest
 import mk.ru.carshop.web.responses.CarInfoResponse
@@ -21,9 +22,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/car")
 class CarController(private val carService: CarService) {
-    @GetMapping
-    fun findAll(pageable: Pageable): ResponseEntity<Page<CarInfoResponse>> {
-        return ResponseEntity.ok(carService.findAll(pageable))
+    @PostMapping("/find")
+    fun findAll(
+        @RequestBody(required = false) conditions: List<CommonCondition<Any>>?,
+        pageable: Pageable
+    ): ResponseEntity<Page<CarInfoResponse>> {
+        return ResponseEntity.ok(carService.findAll(conditions = conditions, pageable = pageable))
     }
 
     @GetMapping("/{id}")
@@ -42,7 +46,7 @@ class CarController(private val carService: CarService) {
     }
 
     @DeleteMapping("/{id}")
-    fun deleteCar(@PathVariable id: UUID): ResponseEntity<Void> {
+    fun deleteCar(@PathVariable id: UUID): ResponseEntity<Unit> {
         carService.deleteCar(id)
         return ResponseEntity.ok().build()
     }
