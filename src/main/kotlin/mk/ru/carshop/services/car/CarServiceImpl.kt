@@ -27,7 +27,7 @@ class CarServiceImpl(
 ) : CarService {
     private final val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun findAll(
+    override fun findCars(
         conditions: List<CommonCondition<Any>>?,
         pageable: Pageable?
     ): Page<CarInfoResponse> {

@@ -29,7 +29,7 @@ class CarController(private val carService: CarService) {
         @RequestBody(required = false) conditions: List<CommonCondition<Any>>?,
         @RequestParam(required = false) pageable: Pageable?
     ): ResponseEntity<Page<CarInfoResponse>> {
-        return ResponseEntity.ok(carService.findAll(conditions = conditions, pageable = pageable))
+        return ResponseEntity.ok(carService.findCars(conditions = conditions, pageable = pageable))
     }
 
     @GetMapping("/{id}")
