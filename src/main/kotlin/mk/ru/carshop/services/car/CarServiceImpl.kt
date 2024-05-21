@@ -1,15 +1,7 @@
 package mk.ru.carshop.services.car
 
-import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Predicate
 import java.util.UUID
-import mk.ru.carshop.enums.CriteriaOperations.EQUALS
-import mk.ru.carshop.enums.CriteriaOperations.GREATER_THAN
-import mk.ru.carshop.enums.CriteriaOperations.GREATER_THAN_OR_EQUAL
-import mk.ru.carshop.enums.CriteriaOperations.LESS_THAN
-import mk.ru.carshop.enums.CriteriaOperations.LESS_THAN_OR_EQUAL
-import mk.ru.carshop.enums.CriteriaOperations.LIKE
-import mk.ru.carshop.enums.CriteriaOperations.NOT_EQUALS
 import mk.ru.carshop.exceptions.ContentNotFoundError
 import mk.ru.carshop.exceptions.SellingException
 import mk.ru.carshop.exceptions.SoftDeletionException
@@ -17,7 +9,6 @@ import mk.ru.carshop.mappers.CarMapper
 import mk.ru.carshop.persistence.entities.Car
 import mk.ru.carshop.persistence.repositories.CarRepository
 import mk.ru.carshop.services.criteria.conditions.CommonCondition
-import mk.ru.carshop.services.criteria.specifications.PredicateSpecification
 import mk.ru.carshop.web.requests.CreateCarRequest
 import mk.ru.carshop.web.requests.UpdateCarRequest
 import mk.ru.carshop.web.responses.CarInfoResponse
@@ -36,34 +27,27 @@ class CarServiceImpl(
 ) : CarService {
     private final val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun findAll(
+    override fun findCars(
         conditions: List<CommonCondition<Any>>?,
         pageable: Pageable?
-    ): List<CarInfoResponse> {
+    ): Page<CarInfoResponse> {
         val specification: Specification<Car> = Specification<Car> { root, _, criteriaBuilder ->
             val predicates = mutableListOf<Predicate>()
-            conditions?.let {
-                it.forEach { condition ->
-                    val predicateSpecification: PredicateSpecification<Any> = condition.predicateSpecification!!
-                    val expression: Expression<Any> = root.get(condition.field)
-                    val value = condition.value
-                    val predicate: Predicate = when (condition.operation) {
-                        EQUALS -> predicateSpecification.equalPredicate(expression, value, criteriaBuilder)
-                        NOT_EQUALS -> predicateSpecification.notEqualPredicate(expression, value, criteriaBuilder)
-                        GREATER_THAN -> predicateSpecification.greaterThanPredicate(expression, value, criteriaBuilder)
-                        GREATER_THAN_OR_EQUAL -> predicateSpecification.greaterThanOrEqualPredicate(expression, value, criteriaBuilder)
-                        LESS_THAN -> predicateSpecification.lessThanPredicate(expression, value, criteriaBuilder)
-                        LESS_THAN_OR_EQUAL -> predicateSpecification.lessThanOrEqualPredicate(expression, value, criteriaBuilder)
-                        LIKE -> predicateSpecification.likePredicate(expression, value, criteriaBuilder)
-                    }
-                    predicates.add(predicate)
-                }
-                criteriaBuilder.and(* predicates.toTypedArray())
+            conditions?.forEach { condition ->
+                predicates.add(
+                    condition.operation.getPredicate(
+                        predicateSpecification = condition.predicateSpecification,
+                        expression = root.get(condition.field),
+                        value = condition.value,
+                        criteriaBuilder = criteriaBuilder
+                    )
+                )
             }
+            criteriaBuilder.and(* predicates.toTypedArray())
         }
         val cars: Page<Car> = carRepository.findAll(specification, pageable ?: Pageable.unpaged())
         log.info("Found ${cars.totalElements} of cars ${conditions?.let { "with ${it.size} of" } ?: "without"} conditions")
-        return cars.map { carMapper.toInfoResponse(it) }.toList()
+        return cars.map { carMapper.toInfoResponse(it) }
     }
 
     override fun findById(id: UUID): CarInfoResponse {
