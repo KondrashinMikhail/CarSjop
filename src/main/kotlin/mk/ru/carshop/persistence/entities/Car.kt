@@ -20,11 +20,11 @@ data class Car(
     var model: String? = null,
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    var registrationDate: LocalDate = LocalDate.now(),
+    var registrationDate: LocalDate? = LocalDate.now(),
     @Column(nullable = false)
-    var deleted: Boolean = false,
+    var deleted: Boolean? = false,
     @Column(nullable = false)
-    var sold: Boolean = false,
+    var sold: Boolean? = false,
     @Column(nullable = false)
     var price: BigDecimal? = null
 )

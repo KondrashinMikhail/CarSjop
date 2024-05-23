@@ -9,55 +9,49 @@ class BooleanPredicateSpecification : PredicateSpecification<Boolean> {
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.equal(expression, value)
-    }
+    ): Predicate = criteriaBuilder.equal(expression, value)
 
     override fun notEqualPredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.notEqual(expression, value)
-    }
+    ): Predicate = criteriaBuilder.notEqual(expression, value)
+
 
     override fun greaterThanPredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThan(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThan(expression, value)
+
 
     override fun greaterThanOrEqualPredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThanOrEqualTo(expression, value)
+
 
     override fun lessThanPredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThan(expression, value)
-    }
+    ): Predicate =
+        criteriaBuilder.lessThan(expression, value)
+
 
     override fun lessThanOrEqualPredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThanOrEqualTo(expression, value)
-    }
+    ): Predicate =
+        criteriaBuilder.lessThanOrEqualTo(expression, value)
+
 
     override fun likePredicate(
         expression: Expression<Boolean>,
         value: Boolean,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.equal(expression, value)
-    }
+    ): Predicate = criteriaBuilder.equal(expression, value)
 }
+    

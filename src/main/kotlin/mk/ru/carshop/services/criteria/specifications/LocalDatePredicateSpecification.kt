@@ -11,55 +11,47 @@ class LocalDatePredicateSpecification : PredicateSpecification<LocalDate> {
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.equal(criteriaBuilder.function("date", LocalDateTime::class.java, expression), value)
-    }
+    ): Predicate = criteriaBuilder.equal(criteriaBuilder.function("date", LocalDateTime::class.java, expression), value)
+
 
     override fun notEqualPredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.notEqual(expression, value)
-    }
+    ): Predicate = criteriaBuilder.notEqual(expression, value)
+
 
     override fun greaterThanPredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThan(expression, value);
-    }
+    ): Predicate = criteriaBuilder.greaterThan(expression, value)
+
 
     override fun greaterThanOrEqualPredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThanOrEqualTo(expression, value)
+
 
     override fun lessThanPredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThan(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThan(expression, value)
+
 
     override fun lessThanOrEqualPredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThanOrEqualTo(expression, value)
+
 
     override fun likePredicate(
         expression: Expression<LocalDate>,
         value: LocalDate,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.between(expression, value.minusDays(1), value.plusDays(1))
-    }
+    ): Predicate = criteriaBuilder.between(expression, value.minusDays(1), value.plusDays(1))
 }

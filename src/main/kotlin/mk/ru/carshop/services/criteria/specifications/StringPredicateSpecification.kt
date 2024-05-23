@@ -9,55 +9,47 @@ class StringPredicateSpecification : PredicateSpecification<String> {
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.equal(expression, value)
-    }
+    ): Predicate = criteriaBuilder.equal(expression, value)
+
 
     override fun notEqualPredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.notEqual(expression, value)
-    }
+    ): Predicate = criteriaBuilder.notEqual(expression, value)
+
 
     override fun greaterThanPredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThan(expression, value);
-    }
+    ): Predicate = criteriaBuilder.greaterThan(expression, value)
+
 
     override fun greaterThanOrEqualPredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThanOrEqualTo(expression, value)
+
 
     override fun lessThanPredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThan(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThan(expression, value)
+
 
     override fun lessThanOrEqualPredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThanOrEqualTo(expression, value)
+
 
     override fun likePredicate(
         expression: Expression<String>,
         value: String,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.like(expression, "%$value%")
-    }
+    ): Predicate = criteriaBuilder.like(expression, "%$value%")
 }
