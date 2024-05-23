@@ -28,37 +28,30 @@ class CarController(private val carService: CarService) {
     fun findAll(
         @RequestBody(required = false) conditions: List<CommonCondition<Any>>?,
         @RequestParam(required = false) pageable: Pageable?
-    ): ResponseEntity<Page<CarInfoResponse>> {
-        return ResponseEntity.ok(carService.findCars(conditions = conditions, pageable = pageable))
-    }
+    ): ResponseEntity<Page<CarInfoResponse>> =
+        ResponseEntity.ok(carService.findCars(conditions = conditions, pageable = pageable))
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: UUID): ResponseEntity<CarInfoResponse> {
-        return ResponseEntity.ok(carService.findById(id))
-    }
+    fun findById(@PathVariable id: UUID): ResponseEntity<CarInfoResponse> =
+        ResponseEntity.ok(carService.findById(id))
 
     @PostMapping
-    fun createCar(@RequestBody createCarRequest: CreateCarRequest): ResponseEntity<CreateCarResponse> {
-        return ResponseEntity.ok(carService.createCar(createCarRequest))
-    }
+    fun createCar(@RequestBody createCarRequest: CreateCarRequest): ResponseEntity<CreateCarResponse> =
+        ResponseEntity.ok(carService.createCar(createCarRequest))
 
     @PatchMapping
-    fun updateCar(@RequestBody updateCarRequest: UpdateCarRequest): ResponseEntity<CarInfoResponse> {
-        return ResponseEntity.ok(carService.updateCar(updateCarRequest))
-    }
+    fun updateCar(@RequestBody updateCarRequest: UpdateCarRequest): ResponseEntity<CarInfoResponse> =
+        ResponseEntity.ok(carService.updateCar(updateCarRequest))
 
     @DeleteMapping("/{id}")
-    fun deleteCar(@PathVariable id: UUID): ResponseEntity<Unit> {
-        return ResponseEntity.ok(carService.deleteCar(id))
-    }
+    fun deleteCar(@PathVariable id: UUID): ResponseEntity<Unit> =
+        ResponseEntity.ok(carService.deleteCar(id))
 
     @PutMapping("/restore/{id}")
-    fun restoreCar(@PathVariable id: UUID): ResponseEntity<Unit> {
-        return ResponseEntity.ok(carService.restoreCar(id))
-    }
+    fun restoreCar(@PathVariable id: UUID): ResponseEntity<Unit> =
+        ResponseEntity.ok(carService.restoreCar(id))
 
     @PutMapping("/sell/{id}")
-    fun sellCar(@PathVariable id: UUID): ResponseEntity<Unit> {
-        return ResponseEntity.ok(carService.sellCar(id))
-    }
+    fun sellCar(@PathVariable id: UUID): ResponseEntity<Unit> =
+        ResponseEntity.ok(carService.sellCar(id))
 }

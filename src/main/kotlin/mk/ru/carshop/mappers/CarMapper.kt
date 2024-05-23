@@ -8,30 +8,24 @@ import org.springframework.stereotype.Component
 
 @Component
 class CarMapper {
-    fun toCreateResponse(car: Car): CreateCarResponse {
-        return CreateCarResponse(
-            id = car.id!!,
-            registrationDate = car.registrationDate
-        )
-    }
+    fun toCreateResponse(car: Car): CreateCarResponse = CreateCarResponse(
+        id = car.id!!,
+        registrationDate = car.registrationDate!!
+    )
 
-    fun toInfoResponse(car: Car): CarInfoResponse {
-        return CarInfoResponse(
-            id = car.id!!,
-            manufacturer = car.manufacturer!!,
-            model = car.model!!,
-            registrationDate = car.registrationDate,
-            deleted = car.deleted,
-            sold = car.sold,
-            price = car.price!!,
-        )
-    }
+    fun toInfoResponse(car: Car): CarInfoResponse = CarInfoResponse(
+        id = car.id!!,
+        manufacturer = car.manufacturer!!,
+        model = car.model!!,
+        registrationDate = car.registrationDate!!,
+        deleted = car.deleted!!,
+        sold = car.sold!!,
+        price = car.price!!,
+    )
 
-    fun toEntity(car: CreateCarRequest): Car {
-        return Car(
-            manufacturer = car.manufacturer,
-            model = car.model,
-            price = car.price
-        )
-    }
+    fun toEntity(car: CreateCarRequest): Car = Car(
+        manufacturer = car.manufacturer,
+        model = car.model,
+        price = car.price
+    )
 }

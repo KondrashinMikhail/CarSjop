@@ -10,59 +10,45 @@ class BigDecimalPredicateSpecification : PredicateSpecification<BigDecimal> {
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.equal(expression, value)
-    }
+    ): Predicate = criteriaBuilder.equal(expression, value)
 
     override fun notEqualPredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.notEqual(expression, value)
-    }
+    ): Predicate = criteriaBuilder.notEqual(expression, value)
 
     override fun greaterThanPredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThan(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThan(expression, value)
 
     override fun greaterThanOrEqualPredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.greaterThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.greaterThanOrEqualTo(expression, value)
 
     override fun lessThanPredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThan(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThan(expression, value)
 
     override fun lessThanOrEqualPredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.lessThanOrEqualTo(expression, value)
-    }
+    ): Predicate = criteriaBuilder.lessThanOrEqualTo(expression, value)
 
     override fun likePredicate(
         expression: Expression<BigDecimal>,
         value: BigDecimal,
         criteriaBuilder: CriteriaBuilder
-    ): Predicate {
-        return criteriaBuilder.between(
-            expression,
-            value.multiply(BigDecimal.valueOf(0.9)),
-            value.multiply(BigDecimal.valueOf(1.1))
-        )
-    }
+    ): Predicate = criteriaBuilder.between(
+        expression,
+        value.multiply(BigDecimal.valueOf(0.9)),
+        value.multiply(BigDecimal.valueOf(1.1))
+    )
 }

@@ -27,10 +27,7 @@ class CarServiceImpl(
 ) : CarService {
     private final val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun findCars(
-        conditions: List<CommonCondition<Any>>?,
-        pageable: Pageable?
-    ): Page<CarInfoResponse> {
+    override fun findCars(conditions: List<CommonCondition<Any>>?, pageable: Pageable?): Page<CarInfoResponse> {
         val specification: Specification<Car> = Specification<Car> { root, _, criteriaBuilder ->
             val predicates = mutableListOf<Predicate>()
             conditions?.forEach { condition ->
@@ -51,7 +48,7 @@ class CarServiceImpl(
     }
 
     override fun findById(id: UUID): CarInfoResponse {
-        val car: Car = findEntityById(id = id)
+        val car: Car = findEntityById(id)
         log.info("Found car with id - $id")
         return carMapper.toInfoResponse(car)
     }
@@ -65,6 +62,7 @@ class CarServiceImpl(
 
     override fun updateCar(updateCarRequest: UpdateCarRequest): CarInfoResponse {
         val car = findEntityById(id = updateCarRequest.id, deletionCheck = true, soldCheck = true)
+
         updateCarRequest.manufacturer?.let { car.manufacturer = it }
         updateCarRequest.model?.let { car.model = it }
         updateCarRequest.price?.let { car.price = it }
@@ -82,8 +80,8 @@ class CarServiceImpl(
     }
 
     override fun restoreCar(id: UUID) {
-        val car = findEntityById(id = id)
-        when (car.deleted) {
+        val car = findEntityById(id)
+        when (car.deleted!!) {
             true -> car.deleted = false
             false -> throw SoftDeletionException("Car with id - $id is not deleted")
         }
@@ -100,9 +98,9 @@ class CarServiceImpl(
 
     private fun findEntityById(id: UUID, deletionCheck: Boolean = false, soldCheck: Boolean = false): Car {
         val car: Car = carRepository.findById(id).orElseThrow { ContentNotFoundError("Car with id - $id not found") }
-        if (car.deleted && deletionCheck)
+        if (deletionCheck && car.deleted!!)
             throw SoftDeletionException("Car with id - $id not found")
-        if (car.sold && soldCheck)
+        if (soldCheck && car.sold!!)
             throw SellingException("Car with id - $id is sold")
         return car
     }

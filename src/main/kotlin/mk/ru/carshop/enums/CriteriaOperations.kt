@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.Predicate
 import mk.ru.carshop.services.criteria.specifications.PredicateSpecification
 
 enum class CriteriaOperations(
-    private val function: (PredicateSpecification<Any>, Expression<Any>, Any, CriteriaBuilder) -> Predicate
+    private val criteriaOperation: (PredicateSpecification<Any>, Expression<Any>, Any, CriteriaBuilder) -> Predicate
 ) {
     @JsonAlias("=", "equals")
     EQUALS(PredicateSpecification<Any>::equalPredicate),
@@ -36,6 +36,6 @@ enum class CriteriaOperations(
         value: Any,
         criteriaBuilder: CriteriaBuilder
     ): Predicate {
-        return function(predicateSpecification, expression, value, criteriaBuilder)
+        return criteriaOperation(predicateSpecification, expression, value, criteriaBuilder)
     }
 }
