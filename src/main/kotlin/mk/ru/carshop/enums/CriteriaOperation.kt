@@ -6,7 +6,7 @@ import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Predicate
 import mk.ru.carshop.services.criteria.specifications.PredicateSpecification
 
-enum class CriteriaOperations(
+enum class CriteriaOperation(
     private val criteriaOperation: (PredicateSpecification<Any>, Expression<Any>, Any, CriteriaBuilder) -> Predicate
 ) {
     @JsonAlias("=", "equals")
