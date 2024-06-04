@@ -10,6 +10,5 @@ data class CarInfoResponse(
     val model: String,
     val registrationDate: LocalDate,
     val deleted: Boolean,
-    val sold: Boolean,
     val price: BigDecimal
 )

@@ -24,7 +24,5 @@ data class Car(
     @Column(nullable = false)
     var deleted: Boolean? = false,
     @Column(nullable = false)
-    var sold: Boolean? = false,
-    @Column(nullable = false)
     var price: BigDecimal? = null
 )

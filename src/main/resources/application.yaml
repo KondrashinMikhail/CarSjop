@@ -17,7 +17,7 @@ spring:
   output:
     ansi:
       enabled: always
-metadata:
-  name: ${spring.application.name}
-  version: ${APP_VERSION:1.0}
-  spring-version: ${spring-boot.formatted-version}
+jwt:
+  secret: NDI2MTY1NkM2NDc1NkU2N19jYXJfc2hvcF9hcHA # 4261656C64756E67_car_shop_app
+  access-token-expiration: 3600000
+  refresh-token-expiration: 86400000

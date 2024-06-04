@@ -1,14 +1,14 @@
 package mk.ru.carshop.mappers
 
 import mk.ru.carshop.persistence.entities.Car
-import mk.ru.carshop.web.requests.CreateCarRequest
+import mk.ru.carshop.web.requests.CarCreateRequest
 import mk.ru.carshop.web.responses.CarInfoResponse
-import mk.ru.carshop.web.responses.CreateCarResponse
+import mk.ru.carshop.web.responses.CarCreateResponse
 import org.springframework.stereotype.Component
 
 @Component
 class CarMapper {
-    fun toCreateResponse(car: Car): CreateCarResponse = CreateCarResponse(
+    fun toCreateResponse(car: Car): CarCreateResponse = CarCreateResponse(
         id = car.id!!,
         registrationDate = car.registrationDate!!
     )
@@ -19,11 +19,10 @@ class CarMapper {
         model = car.model!!,
         registrationDate = car.registrationDate!!,
         deleted = car.deleted!!,
-        sold = car.sold!!,
         price = car.price!!,
     )
 
-    fun toEntity(car: CreateCarRequest): Car = Car(
+    fun toEntity(car: CarCreateRequest): Car = Car(
         manufacturer = car.manufacturer,
         model = car.model,
         price = car.price
