@@ -3,6 +3,7 @@ package mk.ru.carshop.web.controllers
 import mk.ru.carshop.services.authentication.AuthenticationService
 import mk.ru.carshop.web.requests.AuthenticationRequest
 import mk.ru.carshop.web.responses.AuthenticationResponse
+import mk.ru.carshop.web.responses.RefreshTokenResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,7 +22,7 @@ class AuthController(
         ResponseEntity.ok(authenticationService.authentication(authRequest))
 
     @PostMapping("/refresh")
-    fun refresh(@RequestBody refreshToken: String): ResponseEntity<String> =
+    fun refresh(@RequestBody refreshToken: String): ResponseEntity<RefreshTokenResponse> =
         authenticationService.refreshAccessToken(refreshToken)
             ?.let { ResponseEntity.ok(it) }
             ?: throw ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid refresh token.")

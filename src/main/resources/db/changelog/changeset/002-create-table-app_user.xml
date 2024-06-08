@@ -11,11 +11,8 @@
             </not>
         </preConditions>
         <createTable tableName="app_user">
-            <column name="id" type="uuid">
-                <constraints primaryKey="true" nullable="false" unique="true"/>
-            </column>
             <column name="login" type="varchar">
-                <constraints nullable="false" unique="true"/>
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="password" type="varchar">
                 <constraints nullable="false"/>
@@ -23,17 +20,20 @@
             <column name="mail" type="varchar">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="balance" type="numeric">
-                <constraints nullable="false"/>
-            </column>
             <column name="role" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_agree_receive_mails" type="boolean">
+            <column name="agree_receive_mails" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="blocked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="registration_date" type="date">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addDefaultValue tableName="app_user" columnName="is_agree_receive_mails" defaultValueBoolean="true"/>
+        <addDefaultValue tableName="app_user" columnName="agree_receive_mails" defaultValueBoolean="true"/>
     </changeSet>
 
 </databaseChangeLog>

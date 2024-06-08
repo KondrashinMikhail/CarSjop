@@ -5,5 +5,6 @@
 
     <include file="db/changelog/changeset/001-create-table-car.xml"/>
     <include file="/db/changelog/changeset/002-create-table-app_user.xml"/>
+    <include file="/db/changelog/changeset/003-connect-car-to-users.xml"/>
 
 </databaseChangeLog>

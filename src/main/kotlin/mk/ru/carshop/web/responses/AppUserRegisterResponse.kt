@@ -1,8 +1,8 @@
 package mk.ru.carshop.web.responses
 
-import java.util.UUID
+import java.time.LocalDate
 
 data class AppUserRegisterResponse(
-    val id: UUID,
     val login: String,
+    val registrationDate: LocalDate,
 )

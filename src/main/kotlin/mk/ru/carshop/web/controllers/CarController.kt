@@ -37,12 +37,14 @@ class CarController(private val carService: CarService) {
 
     @GetMapping
     fun findCars(
-        @RequestParam(required = false) deleted: Boolean?,
+        @RequestParam(required = false) byOwner: Boolean? = true,
+        @RequestParam(required = false) showDeleted: Boolean? = false,
         @RequestParam(required = false) pageable: Pageable?
     ): ResponseEntity<Page<CarInfoResponse>> =
         ResponseEntity.ok(
             carService.findCars(
-                showDeleted = deleted,
+                byOwner = byOwner,
+                showDeleted = showDeleted,
                 pageable = pageable
             )
         )

@@ -6,12 +6,14 @@ import mk.ru.carshop.exceptions.ContentNotFoundError
 import mk.ru.carshop.exceptions.SoftDeletionException
 import mk.ru.carshop.mappers.CarMapper
 import mk.ru.carshop.persistence.entities.Car
+import mk.ru.carshop.persistence.repositories.AppUserRepository
 import mk.ru.carshop.persistence.repositories.CarRepository
 import mk.ru.carshop.services.criteria.conditions.CommonCondition
+import mk.ru.carshop.utils.AppUserInfo
 import mk.ru.carshop.web.requests.CarCreateRequest
 import mk.ru.carshop.web.requests.CarUpdateRequest
-import mk.ru.carshop.web.responses.CarInfoResponse
 import mk.ru.carshop.web.responses.CarCreateResponse
+import mk.ru.carshop.web.responses.CarInfoResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service
 @Service
 class CarServiceImpl(
     private val carRepository: CarRepository,
+    private val appUserRepository: AppUserRepository,
     private val carMapper: CarMapper,
 ) : CarService {
     private final val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -46,12 +49,23 @@ class CarServiceImpl(
         return cars.map { carMapper.toInfoResponse(it) }
     }
 
-    override fun findCars(showDeleted: Boolean?, pageable: Pageable?): Page<CarInfoResponse> {
-        val cars: Page<Car> = carRepository.findByDeleted(
-            deleted = showDeleted ?: false,
-            pageable = pageable ?: Pageable.unpaged()
-        )
-        log.info("Found ${cars.totalElements} of available ${showDeleted ?: "and deleted"} cars")
+    override fun findCars(byOwner: Boolean?, showDeleted: Boolean?, pageable: Pageable?): Page<CarInfoResponse> {
+        val login: String = AppUserInfo.getAuthenticatedLogin()
+        val finalPageable = pageable ?: Pageable.unpaged()
+
+        val cars: Page<Car> = when (showDeleted) {
+            null, false -> when (byOwner) {
+                null, false -> carRepository.findByDeletedFalse(finalPageable)
+                true -> carRepository.findByDeletedFalseAndOwnerLogin(login = login, pageable = finalPageable)
+            }
+
+            true -> when (byOwner) {
+                null, false -> carRepository.findAll(finalPageable)
+                true -> carRepository.findByOwnerLogin(login = login, pageable = finalPageable)
+            }
+        }
+
+        log.info("Found ${cars.totalElements} of available ${showDeleted ?: "and deleted"} cars ${byOwner ?: "and by owner '$login'"}")
         return cars.map { carMapper.toInfoResponse(it) }
     }
 
@@ -63,6 +77,11 @@ class CarServiceImpl(
 
     override fun createCar(carCreateRequest: CarCreateRequest): CarCreateResponse {
         val car = carMapper.toEntity(carCreateRequest)
+
+        val authenticatedLogin: String = AppUserInfo.getAuthenticatedLogin()
+        car.owner = appUserRepository.findById(authenticatedLogin)
+            .orElseThrow { ContentNotFoundError("User with login - $authenticatedLogin not found") }
+
         val savedCar = carRepository.save(car)
         log.info("Created car with id - ${savedCar.id}")
         return carMapper.toCreateResponse(savedCar)
@@ -70,6 +89,7 @@ class CarServiceImpl(
 
     override fun updateCar(carUpdateRequest: CarUpdateRequest): CarInfoResponse {
         val car = findEntityById(id = carUpdateRequest.id, deletionCheck = true)
+        AppUserInfo.checkAccessAllowed(car.owner?.login!!)
 
         carUpdateRequest.manufacturer?.let { car.manufacturer = it }
         carUpdateRequest.model?.let { car.model = it }

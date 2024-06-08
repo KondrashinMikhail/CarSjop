@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
 interface CarRepository : JpaRepository<Car, UUID>, JpaSpecificationExecutor<Car> {
-    fun findByDeleted(deleted: Boolean, pageable: Pageable?): Page<Car>
+    fun findByDeletedFalseAndOwnerLogin(login: String, pageable: Pageable?): Page<Car>
+    fun findByOwnerLogin(login: String, pageable: Pageable?): Page<Car>
+    fun findByDeletedFalse(pageable: Pageable?): Page<Car>
 }
