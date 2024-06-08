@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable
 
 interface CarService {
     fun searchCars(conditions: List<CommonCondition<Any>>?, pageable: Pageable?): Page<CarInfoResponse>
-    fun findCars(showDeleted: Boolean?, pageable: Pageable?): Page<CarInfoResponse>
+    fun findCars(byOwner: Boolean?, showDeleted: Boolean?, pageable: Pageable?): Page<CarInfoResponse>
     fun findById(id: UUID): CarInfoResponse
     fun createCar(carCreateRequest: CarCreateRequest): CarCreateResponse
     fun updateCar(carUpdateRequest: CarUpdateRequest): CarInfoResponse
