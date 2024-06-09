@@ -1,6 +1,6 @@
 #spring:
 #  datasource:
-#    url: jdbc:h2:mem:car-shop
+#    url: jdbc:h2:mem:shop
 #    driverClassName: org.h2.Driver
 #    username: admin
 #    password: admin
@@ -10,6 +10,6 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/carshop
+    url: jdbc:postgresql://localhost:5432/shop
     username: postgres
     password: postgres
