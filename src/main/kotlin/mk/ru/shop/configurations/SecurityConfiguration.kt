@@ -2,7 +2,6 @@ package mk.ru.shop.configurations
 
 import mk.ru.shop.enums.AppUserRole
 import mk.ru.shop.services.user.AppUserDetailsService
-import mk.ru.shop.web.filters.JwtAuthenticationFilter
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableConfigurationProperties(JwtProperties::class)
 class SecurityConfiguration(
-    private val appUserDetailsService: AppUserDetailsService
+    private val userDetailsService: AppUserDetailsService
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -30,7 +29,7 @@ class SecurityConfiguration(
     @Bean
     fun authenticationProvider(): AuthenticationProvider =
         DaoAuthenticationProvider().also {
-            it.setUserDetailsService(appUserDetailsService)
+            it.setUserDetailsService(userDetailsService)
             it.setPasswordEncoder(passwordEncoder())
         }
 
@@ -45,10 +44,9 @@ class SecurityConfiguration(
         .csrf { it.disable() }
         .authorizeHttpRequests {
             it
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/user/{login}/change-password", "/user/register").permitAll()
-                .requestMatchers("/user/{login}/block", "/user/{login}/restore")
-                .hasAuthority(AppUserRole.ADMIN.role)
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/user/{login}/change-password", "/api/user/register").permitAll()
+                .requestMatchers("/api/user/{login}/block", "/api/user/{login}/restore").hasRole(AppUserRole.ADMIN.name)
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().fullyAuthenticated()
         }

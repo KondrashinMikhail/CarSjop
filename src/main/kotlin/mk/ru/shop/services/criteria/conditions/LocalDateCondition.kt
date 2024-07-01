@@ -8,7 +8,7 @@ data class LocalDateCondition(
     override val field: String,
     override val operation: CriteriaOperation,
     override val value: LocalDate,
-) : Condition<LocalDate>(
+) : CommonCondition<LocalDate>(
     field = field,
     operation = operation,
     value = value,

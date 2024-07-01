@@ -6,4 +6,5 @@
     ███████║██║  ██║╚██████╔╝██║
     ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝
 
+Shop v1.0
 Powered by Spring Boot v${spring-boot.version}
