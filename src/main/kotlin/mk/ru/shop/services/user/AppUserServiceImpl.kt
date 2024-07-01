@@ -1,13 +1,12 @@
 package mk.ru.shop.services.user
 
 import jakarta.transaction.Transactional
-import mk.ru.shop.exceptions.ContentNotFoundException
+import mk.ru.shop.exceptions.ContentNotFoundError
 import mk.ru.shop.exceptions.SoftDeletionException
 import mk.ru.shop.exceptions.ValidationException
 import mk.ru.shop.mappers.AppUserMapper
 import mk.ru.shop.persistence.entities.AppUser
-import mk.ru.shop.persistence.repositories.AppUserRepo
-import mk.ru.shop.services.wallet.WalletService
+import mk.ru.shop.persistence.repositories.AppUserRepository
 import mk.ru.shop.utils.AppUserInfo
 import mk.ru.shop.utils.Patterns
 import mk.ru.shop.web.requests.AppUserRegisterRequest
@@ -20,15 +19,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class AppUserServiceImpl(
-    private val appUserRepo: AppUserRepo,
+    private val appUserRepository: AppUserRepository,
     private val appUserMapper: AppUserMapper,
-    private val walletService: WalletService,
     private val encoder: PasswordEncoder
 ) : AppUserService {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun register(registerRequest: AppUserRegisterRequest): AppUserRegisterResponse {
-        if (appUserRepo.existsByLoginOrMail(registerRequest.login, registerRequest.mail))
+        if (appUserRepository.existsByLoginOrMail(registerRequest.login, registerRequest.mail))
             throw ValidationException("User with such credentials already exists")
 
         if (!Patterns.loginRegex.matches(registerRequest.login))
@@ -42,13 +40,8 @@ class AppUserServiceImpl(
 
         val newUser = appUserMapper.toEntity(registerRequest)
         newUser.password = newUser.password?.let { encodePassword(it) }
-        val registeredUser = appUserRepo.save(newUser)
+        val registeredUser = appUserRepository.save(newUser)
         log.info("Registered new user with login - '${registeredUser.login}'")
-
-        registeredUser.wallet = walletService.create(newUser)
-        appUserRepo.save(registeredUser)
-        log.info("Attached wallet - '${registeredUser.wallet?.id}' to user - ${registeredUser.login}")
-
         return appUserMapper.toRegisterResponse(registeredUser)
     }
 
@@ -66,38 +59,36 @@ class AppUserServiceImpl(
 
         user.password = encodePassword(passwordChangeRequest.newPassword)
         log.info("Changed password for user with login - '${user.login}'")
-        appUserRepo.save(user)
+        appUserRepository.save(user)
     }
 
     override fun block(login: String) {
-        AppUserInfo.checkAccessAllowed()
+        AppUserInfo.checkAccessAllowed(login)
 
         val user = findEntityByLogin(login)
         when (user.blocked) {
             true -> throw SoftDeletionException("User with login - $login is already blocked")
             false -> user.blocked = true
         }
-
-        appUserRepo.save(user)
+        appUserRepository.save(user)
         log.info("Blocked user with login - $login by user with login - ${AppUserInfo.getAuthenticatedLogin()}")
     }
 
     override fun restore(login: String) {
-        AppUserInfo.checkAccessAllowed()
+        AppUserInfo.checkAccessAllowed(login)
 
         val user = findEntityByLogin(login)
         when (user.blocked) {
             true -> user.blocked = false
             false -> throw SoftDeletionException("User with login - $login is not blocked")
         }
-
-        appUserRepo.save(user)
+        appUserRepository.save(user)
         log.info("Restored user with id - $login")
     }
 
-    override fun findEntityByLogin(login: String, blockedCheck: Boolean): AppUser {
-        val user: AppUser = appUserRepo.findById(login)
-            .orElseThrow { ContentNotFoundException("User with login - $login not found") }
+    private fun findEntityByLogin(login: String, blockedCheck: Boolean = false): AppUser {
+        val user: AppUser = appUserRepository.findById(login)
+            .orElseThrow { ContentNotFoundError("User with login - $login not found") }
         if (blockedCheck && user.blocked)
             throw SoftDeletionException("User with login - $login not found")
         return user

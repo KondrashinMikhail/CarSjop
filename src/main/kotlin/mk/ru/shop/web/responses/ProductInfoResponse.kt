@@ -10,6 +10,6 @@ data class ProductInfoResponse(
     val description: String?,
     val registrationDate: LocalDate,
     val deleted: Boolean,
-    val actualPrice: BigDecimal,
+    val price: BigDecimal,
     val owner: ProductAppUserInfoResponse
 )

@@ -13,16 +13,13 @@ import mk.ru.shop.services.criteria.specifications.PredicateSpecification
     property = "field"
 )
 @JsonSubTypes(
-    //product
     Type(value = StringCondition::class, name = "name"),
     Type(value = StringCondition::class, name = "description"),
     Type(value = LocalDateCondition::class, name = "registrationDate"),
-    Type(value = BooleanCondition::class, name = "deleted"),
-    //price_history
     Type(value = BigDecimalCondition::class, name = "price"),
-    Type(value = LocalDateCondition::class, name = "date"),
+    Type(value = BooleanCondition::class, name = "deleted"),
 )
-abstract class Condition<T>(
+abstract class CommonCondition<T>(
     open val field: String,
     open val operation: CriteriaOperation,
     open val value: T,
