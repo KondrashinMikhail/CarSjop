@@ -9,6 +9,8 @@ import jakarta.persistence.OneToMany
 import java.time.LocalDate
 import java.util.UUID
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.UuidGenerator
 
 @Entity
@@ -27,7 +29,8 @@ data class Product(
     var deleted: Boolean? = false,
     @Column(nullable = false)
     var selling: Boolean? = false,
-    @OneToMany(targetEntity = PriceHistory::class, mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = PriceHistory::class, mappedBy = "product")
+    @Fetch(FetchMode.JOIN)
     var priceHistory: List<PriceHistory>? = null,
     @ManyToOne(targetEntity = AppUser::class, fetch = FetchType.LAZY)
     var owner: AppUser? = null,

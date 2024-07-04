@@ -1,6 +1,8 @@
 package mk.ru.shop.web.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import mk.ru.shop.services.user.AppUserService
+import mk.ru.shop.utils.SwaggerUtils
 import mk.ru.shop.web.requests.AppUserRegisterRequest
 import mk.ru.shop.web.requests.PasswordChangeRequest
 import mk.ru.shop.web.responses.AppUserRegisterResponse
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/user")
+@SecurityRequirement(name = SwaggerUtils.SECURITY_SCHEME_NAME)
 class AppUserController(private val appUserService: AppUserService) {
     @PostMapping("/register")
     fun register(@RequestBody appUserRegisterRequest: AppUserRegisterRequest): ResponseEntity<AppUserRegisterResponse> =

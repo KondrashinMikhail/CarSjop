@@ -1,9 +1,12 @@
 package mk.ru.shop.services.product
 
+import jakarta.transaction.Transactional
 import java.util.UUID
 import mk.ru.shop.exceptions.ContentNotFoundException
 import mk.ru.shop.exceptions.SoftDeletionException
+import mk.ru.shop.exceptions.ValidationException
 import mk.ru.shop.mappers.ProductMapper
+import mk.ru.shop.persistence.entities.AppUser
 import mk.ru.shop.persistence.entities.PriceHistory
 import mk.ru.shop.persistence.entities.Product
 import mk.ru.shop.persistence.repositories.ProductRepo
@@ -82,7 +85,7 @@ class ProductServiceImpl(
                 }
             }
         }
-        log.info("Found ${products.totalElements} of available ${showDeleted ?: "and deleted"} products ${byOwner ?: "and by owner '$login'"}")
+        log.info("Found ${products.totalElements} of available ${if (showDeleted!!) "" else "and deleted"} products ${if (byOwner!!) "" else "and by owner '$login'"}")
         return products.map { productMapper.toInfoResponse(it) }
     }
 
@@ -118,7 +121,7 @@ class ProductServiceImpl(
         val authenticatedLogin: String = AppUserInfo.getAuthenticatedLogin()
 
         val updatedProduct: Product = productRepo.save(product.apply {
-            productUpdateRequest.name?.let { name == it }
+            productUpdateRequest.name?.let { name = it }
             productUpdateRequest.description?.let { description = it }
             productUpdateRequest.price?.let {
                 if (CommonFunctions.getActualPrice(product) != it) {
@@ -129,7 +132,6 @@ class ProductServiceImpl(
                             price = it
                         )
                     )
-
                     priceHistory = priceHistory!!.plus(productPriceHistory)
                 }
             }
@@ -137,6 +139,34 @@ class ProductServiceImpl(
 
         log.info("Updated product with id - ${updatedProduct.id}")
         return productMapper.toUpdateResponse(updatedProduct)
+    }
+
+    override fun sell(id: UUID): ProductInfoResponse {
+        val product: Product = findEntityById(id = id, deletionCheck = true)
+        AppUserInfo.checkAccessAllowed(product.owner?.login!!)
+
+        if (product.selling!!)
+            throw SoftDeletionException("Product with id - ${product.id} is already selling")
+
+        product.selling = true
+        productRepo.save(product)
+        log.info("Set selling product with id - $id to 'true'")
+
+        return productMapper.toInfoResponse(product)
+    }
+
+    override fun unsell(id: UUID): ProductInfoResponse {
+        val product: Product = findEntityById(id = id, deletionCheck = true)
+        AppUserInfo.checkAccessAllowed(product.owner?.login!!)
+
+        if (!product.selling!!)
+            throw SoftDeletionException("Product with id - ${product.id} is not selling")
+
+        product.selling = false
+        productRepo.save(product)
+        log.info("Set selling product with id - $id to 'false'")
+
+        return productMapper.toInfoResponse(product)
     }
 
     override fun delete(id: UUID) {
@@ -160,7 +190,16 @@ class ProductServiceImpl(
         log.info("Restored product with id - $id")
     }
 
-    private fun findEntityById(id: UUID, deletionCheck: Boolean = false): Product {
+    @Transactional
+    override fun transfer(product: Product, toUser: AppUser) {
+        if (!product.selling!!) throw ValidationException("Product is not selling")
+        product.owner = toUser
+        product.selling = false
+        productRepo.save(product)
+        log.info("Transferred product with id - ${product.id} to user with login - ${toUser.login}")
+    }
+
+    override fun findEntityById(id: UUID, deletionCheck: Boolean): Product {
         val product: Product =
             productRepo.findById(id).orElseThrow { ContentNotFoundException("Product with id - $id not found") }
         if (deletionCheck && product.deleted!!)

@@ -11,5 +11,6 @@ data class ProductInfoResponse(
     val registrationDate: LocalDate,
     val deleted: Boolean,
     val actualPrice: BigDecimal,
+    val selling: Boolean,
     val owner: ProductAppUserInfoResponse
 )

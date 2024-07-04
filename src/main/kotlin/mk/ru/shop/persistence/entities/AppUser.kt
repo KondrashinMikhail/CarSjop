@@ -29,8 +29,6 @@ data class AppUser(
     @Enumerated(EnumType.STRING)
     var role: AppUserRole = AppUserRole.USER,
     @Column(nullable = false)
-    var agreeReceiveMails: Boolean? = true,
-    @Column(nullable = false)
     var blocked: Boolean = false,
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

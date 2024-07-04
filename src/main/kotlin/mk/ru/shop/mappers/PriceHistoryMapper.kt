@@ -6,10 +6,7 @@ import mk.ru.shop.web.responses.PriceHistoryInfoResponse
 import org.springframework.stereotype.Component
 
 @Component
-class PriceHistoryMapper(
-//    private val productMapper: ProductMapper,
-    private val appUserMapper: AppUserMapper
-) {
+class PriceHistoryMapper(private val appUserMapper: AppUserMapper) {
     fun toEntity(createRequest: PriceHistoryCreateRequest): PriceHistory = PriceHistory(
         product = createRequest.product,
         appUser = createRequest.appUser,
@@ -20,7 +17,6 @@ class PriceHistoryMapper(
         id = priceHistory.id!!,
         price = priceHistory.price!!,
         date = priceHistory.date!!,
-//        product = productMapper.toPriceHistoryInfoResponse(priceHistory.product!!),
         user = appUserMapper.toPriceHistoryInfoResponse(priceHistory.appUser!!)
     )
 }

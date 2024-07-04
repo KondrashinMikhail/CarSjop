@@ -20,6 +20,10 @@ data class Transaction(
     @Column(nullable = false)
     var amount: BigDecimal? = BigDecimal.ZERO,
     @Column(nullable = false)
+    var feeAmount: BigDecimal? = BigDecimal.ZERO,
+    @Column(nullable = false)
+    var feePercent: BigDecimal? = BigDecimal.ZERO,
+    @Column(nullable = false)
     @CreationTimestamp
     var date: LocalDateTime? = LocalDateTime.now(),
     @ManyToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY)

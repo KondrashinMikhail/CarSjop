@@ -1,9 +1,11 @@
 package mk.ru.shop.web.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import java.util.UUID
 import mk.ru.shop.services.criteria.conditions.Condition
 import mk.ru.shop.services.pricehistory.PriceHistoryService
 import mk.ru.shop.services.product.ProductService
+import mk.ru.shop.utils.SwaggerUtils
 import mk.ru.shop.web.requests.ProductCreateRequest
 import mk.ru.shop.web.requests.ProductUpdateRequest
 import mk.ru.shop.web.responses.PriceHistoryInfoResponse
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/product")
+@SecurityRequirement(name = SwaggerUtils.SECURITY_SCHEME_NAME)
 class ProductController(
     private val productService: ProductService,
     private val priceHistoryService: PriceHistoryService
@@ -34,12 +37,7 @@ class ProductController(
         @RequestBody(required = false) conditions: List<Condition<Any>>?,
         @RequestParam(required = false) pageable: Pageable?
     ): ResponseEntity<Page<ProductInfoResponse>> =
-        ResponseEntity.ok(
-            productService.search(
-                conditions = conditions,
-                pageable = pageable
-            )
-        )
+        ResponseEntity.ok(productService.search(conditions = conditions, pageable = pageable))
 
     @GetMapping
     fun find(
@@ -68,6 +66,13 @@ class ProductController(
     @PatchMapping
     fun update(@RequestBody productUpdateRequest: ProductUpdateRequest): ResponseEntity<ProductUpdateResponse> =
         ResponseEntity.ok(productService.update(productUpdateRequest))
+
+    @PostMapping("/{id}/sell")
+    fun sell(@PathVariable id: UUID): ResponseEntity<ProductInfoResponse> = ResponseEntity.ok(productService.sell(id))
+
+    @PostMapping("/{id}/unsell")
+    fun unsell(@PathVariable id: UUID): ResponseEntity<ProductInfoResponse> =
+        ResponseEntity.ok(productService.unsell(id))
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: UUID): ResponseEntity<Unit> = ResponseEntity.ok(productService.delete(id))

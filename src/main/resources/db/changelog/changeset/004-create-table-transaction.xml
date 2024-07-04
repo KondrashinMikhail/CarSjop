@@ -17,18 +17,18 @@
             <column name="amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
+            <column name="fee_amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fee_percent" type="numeric">
+                <constraints nullable="false"/>
+            </column>
             <column name="date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="sender_id" type="uuid">
-                <constraints nullable="true"/>
-            </column>
-            <column name="recipient_id" type="uuid">
-                <constraints nullable="false"/>
-            </column>
-            <column name="product_id" type="uuid">
-                <constraints nullable="true"/>
-            </column>
+            <column name="sender_id" type="uuid"/>
+            <column name="recipient_id" type="uuid"/>
+            <column name="product_id" type="uuid"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="transaction"
                                  baseColumnNames="recipient_id"

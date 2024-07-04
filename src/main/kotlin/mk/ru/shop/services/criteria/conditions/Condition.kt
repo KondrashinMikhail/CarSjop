@@ -21,6 +21,9 @@ import mk.ru.shop.services.criteria.specifications.PredicateSpecification
     //price_history
     Type(value = BigDecimalCondition::class, name = "price"),
     Type(value = LocalDateCondition::class, name = "date"),
+    //transaction
+    Type(value = BigDecimalCondition::class, name = "amount"),
+    Type(value = LocalDateCondition::class, name = "date"),
 )
 abstract class Condition<T>(
     open val field: String,

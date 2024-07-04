@@ -1,7 +1,9 @@
 package mk.ru.shop.web.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import mk.ru.shop.services.authentication.AuthenticationService
 import mk.ru.shop.services.token.TokenService
+import mk.ru.shop.utils.SwaggerUtils
 import mk.ru.shop.web.requests.AuthenticationRequest
 import mk.ru.shop.web.responses.AuthenticationResponse
 import mk.ru.shop.web.responses.RefreshTokenResponse
@@ -15,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/auth")
+@SecurityRequirement(name = SwaggerUtils.SECURITY_SCHEME_NAME)
 class AuthController(
     private val authenticationService: AuthenticationService,
     private val tokenService: TokenService

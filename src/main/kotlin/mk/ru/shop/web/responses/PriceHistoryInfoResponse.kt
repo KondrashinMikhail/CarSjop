@@ -8,6 +8,5 @@ data class PriceHistoryInfoResponse(
     val id: UUID,
     val price: BigDecimal,
     val date: LocalDateTime,
-//    val product: PriceHistoryProductInfoResponse,
     val user: PriceHistoryAppUserInfoResponse
 )
