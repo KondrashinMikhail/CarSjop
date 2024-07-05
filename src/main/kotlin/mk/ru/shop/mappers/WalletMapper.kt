@@ -24,7 +24,7 @@ class WalletMapper(
     )
 
     fun toPaymentInfoResponse(wallet: Wallet): PaymentWalletInfoResponse = PaymentWalletInfoResponse(
-        id = wallet.id!!,
-        ownerLogin = wallet.owner!!.login!!
+        walletId = wallet.id!!,
+        userLogin = wallet.owner!!.login!!
     )
 }

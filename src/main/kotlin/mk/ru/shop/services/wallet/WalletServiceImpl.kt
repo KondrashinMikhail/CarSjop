@@ -13,7 +13,6 @@ import mk.ru.shop.persistence.entities.Transaction
 import mk.ru.shop.persistence.entities.Wallet
 import mk.ru.shop.persistence.repositories.WalletRepo
 import mk.ru.shop.utils.AppUserInfo
-import mk.ru.shop.web.responses.WalletInfoResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -32,7 +31,7 @@ class WalletServiceImpl(
     }
 
     @Transactional
-    override fun getFromBalance(transaction: Transaction, wallet: Wallet): WalletInfoResponse {
+    override fun getFromBalance(transaction: Transaction, wallet: Wallet) {
         AppUserInfo.checkAccessAllowed(wallet.owner?.login!!)
         val amount: BigDecimal = transaction.amount!! + transaction.feeAmount!!
 
@@ -43,22 +42,18 @@ class WalletServiceImpl(
         wallet.lastModifiedDate = LocalDateTime.now()
         wallet.transactionsSender = wallet.transactionsSender!!.plus(transaction)
         walletRepo.save(wallet)
-        log.info("Wrote off $amount from wallet - ${wallet.id}")
-
-        return walletMapper.toInfoResponse(wallet)
+        log.info("Got $amount from wallet - ${wallet.id}")
     }
 
     @Transactional
-    override fun addToBalance(transaction: Transaction, wallet: Wallet): WalletInfoResponse {
+    override fun addToBalance(transaction: Transaction, wallet: Wallet) {
         val amount: BigDecimal = transaction.amount!!
 
         wallet.balance = wallet.balance.plus(amount)
         wallet.lastModifiedDate = LocalDateTime.now()
         wallet.transactionsRecipient = wallet.transactionsRecipient!!.plus(transaction)
         walletRepo.save(wallet)
-        log.info("Replenished $amount to wallet - ${wallet.id}")
-
-        return walletMapper.toInfoResponse(wallet)
+        log.info("Added $amount to wallet - ${wallet.id}")
     }
 
     override fun findEntityById(id: UUID): Wallet {

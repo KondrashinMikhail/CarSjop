@@ -13,16 +13,19 @@ class TransactionMapper(
     fun toInfoResponse(transaction: Transaction): TransactionInfoResponse = TransactionInfoResponse(
         id = transaction.id!!,
         amount = transaction.amount!!,
+        feeAmount = transaction.feeAmount!!,
+        feePercent = transaction.feePercent!!,
         date = transaction.date!!,
         product = productMapper.toTransactionInfoResponse(transaction.product!!),
         sender = walletMapper.toTransactionInfoResponse(transaction.sender!!),
         recipient = walletMapper.toTransactionInfoResponse(transaction.recipient!!),
     )
 
-    fun toPaymentInfoResponse(transaction: Transaction): PaymentTransactionInfoResponse = PaymentTransactionInfoResponse(
-        id = transaction.id!!,
-        amount = transaction.amount!!,
-        feePercent = transaction.feePercent!!,
-        feeAmount = transaction.feeAmount!!
-    )
+    fun toPaymentInfoResponse(transaction: Transaction): PaymentTransactionInfoResponse =
+        PaymentTransactionInfoResponse(
+            id = transaction.id!!,
+            amount = transaction.amount!!,
+            feePercent = transaction.feePercent!!,
+            feeAmount = transaction.feeAmount!!
+        )
 }

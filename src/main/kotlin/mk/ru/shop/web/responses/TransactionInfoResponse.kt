@@ -7,6 +7,8 @@ import java.util.UUID
 data class TransactionInfoResponse(
     val id: UUID,
     val amount: BigDecimal,
+    val feeAmount: BigDecimal,
+    val feePercent: BigDecimal,
     val date: LocalDateTime,
     val sender: TransactionWalletInfoResponse,
     val recipient: TransactionWalletInfoResponse,
