@@ -1,12 +1,17 @@
 package mk.ru.shop.web.controllers
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import java.util.UUID
-import mk.ru.shop.services.criteria.conditions.CommonCondition
+import mk.ru.shop.services.criteria.conditions.Condition
+import mk.ru.shop.services.pricehistory.PriceHistoryService
 import mk.ru.shop.services.product.ProductService
+import mk.ru.shop.utils.SwaggerUtils
 import mk.ru.shop.web.requests.ProductCreateRequest
 import mk.ru.shop.web.requests.ProductUpdateRequest
-import mk.ru.shop.web.responses.ProductCreateResponse
-import mk.ru.shop.web.responses.ProductInfoResponse
+import mk.ru.shop.web.responses.pricehistory.PriceHistoryInfoResponse
+import mk.ru.shop.web.responses.product.ProductCreateResponse
+import mk.ru.shop.web.responses.product.ProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductUpdateResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
@@ -21,30 +26,31 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/product")
-class ProductController(private val productService: ProductService) {
+@RequestMapping("/product")
+@SecurityRequirement(name = SwaggerUtils.SECURITY_SCHEME_NAME)
+class ProductController(
+    private val productService: ProductService,
+    private val priceHistoryService: PriceHistoryService
+) {
     @PostMapping("/search")
     fun search(
-        @RequestBody(required = false) conditions: List<CommonCondition<Any>>?,
+        @RequestBody(required = false) conditions: List<Condition<Any>>?,
         @RequestParam(required = false) pageable: Pageable?
     ): ResponseEntity<Page<ProductInfoResponse>> =
-        ResponseEntity.ok(
-            productService.searchProducts(
-                conditions = conditions,
-                pageable = pageable
-            )
-        )
+        ResponseEntity.ok(productService.search(conditions = conditions, pageable = pageable))
 
     @GetMapping
     fun find(
-        @RequestParam(required = false) byOwner: Boolean? = true,
+        @RequestParam(required = false) onlySelling: Boolean? = true,
+        @RequestParam(required = false) byOwner: Boolean? = false,
         @RequestParam(required = false) showDeleted: Boolean? = false,
         @RequestParam(required = false) pageable: Pageable?
     ): ResponseEntity<Page<ProductInfoResponse>> =
         ResponseEntity.ok(
-            productService.findProducts(
+            productService.find(
                 byOwner = byOwner,
                 showDeleted = showDeleted,
+                onlySelling = onlySelling,
                 pageable = pageable
             )
         )
@@ -55,17 +61,36 @@ class ProductController(private val productService: ProductService) {
 
     @PostMapping
     fun create(@RequestBody productCreateRequest: ProductCreateRequest): ResponseEntity<ProductCreateResponse> =
-        ResponseEntity.ok(productService.createProduct(productCreateRequest))
+        ResponseEntity.ok(productService.create(productCreateRequest))
 
     @PatchMapping
-    fun update(@RequestBody productUpdateRequest: ProductUpdateRequest): ResponseEntity<ProductInfoResponse> =
-        ResponseEntity.ok(productService.updateProduct(productUpdateRequest))
+    fun update(@RequestBody productUpdateRequest: ProductUpdateRequest): ResponseEntity<ProductUpdateResponse> =
+        ResponseEntity.ok(productService.update(productUpdateRequest))
+
+    @PostMapping("/{id}/sell")
+    fun sell(@PathVariable id: UUID): ResponseEntity<ProductInfoResponse> = ResponseEntity.ok(productService.sell(id))
+
+    @PostMapping("/{id}/unsell")
+    fun unsell(@PathVariable id: UUID): ResponseEntity<ProductInfoResponse> =
+        ResponseEntity.ok(productService.unsell(id))
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: UUID): ResponseEntity<Unit> =
-        ResponseEntity.ok(productService.deleteProduct(id))
+    fun delete(@PathVariable id: UUID): ResponseEntity<Unit> = ResponseEntity.ok(productService.delete(id))
 
     @PatchMapping("/{id}/restore")
-    fun restore(@PathVariable id: UUID): ResponseEntity<Unit> =
-        ResponseEntity.ok(productService.restoreProduct(id))
+    fun restore(@PathVariable id: UUID): ResponseEntity<Unit> = ResponseEntity.ok(productService.restore(id))
+
+    @GetMapping("/{productId}/price-history")
+    fun getPriceHistory(
+        @PathVariable productId: UUID,
+        @RequestBody(required = false) conditions: List<Condition<Any>>?,
+        @RequestParam(required = false) pageable: Pageable?
+    ): ResponseEntity<Page<PriceHistoryInfoResponse>> =
+        ResponseEntity.ok(
+            priceHistoryService.searchPriceHistory(
+                productId = productId,
+                conditions = conditions,
+                pageable = pageable
+            )
+        )
 }
