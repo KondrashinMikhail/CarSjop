@@ -8,10 +8,10 @@ import mk.ru.shop.services.product.ProductService
 import mk.ru.shop.utils.SwaggerUtils
 import mk.ru.shop.web.requests.ProductCreateRequest
 import mk.ru.shop.web.requests.ProductUpdateRequest
-import mk.ru.shop.web.responses.PriceHistoryInfoResponse
-import mk.ru.shop.web.responses.ProductCreateResponse
-import mk.ru.shop.web.responses.ProductInfoResponse
-import mk.ru.shop.web.responses.ProductUpdateResponse
+import mk.ru.shop.web.responses.pricehistory.PriceHistoryInfoResponse
+import mk.ru.shop.web.responses.product.ProductCreateResponse
+import mk.ru.shop.web.responses.product.ProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductUpdateResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity

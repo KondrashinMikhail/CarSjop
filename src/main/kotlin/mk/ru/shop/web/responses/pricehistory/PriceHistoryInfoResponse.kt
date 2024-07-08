@@ -1,4 +1,4 @@
-package mk.ru.shop.web.responses
+package mk.ru.shop.web.responses.pricehistory
 
 import java.math.BigDecimal
 import java.time.LocalDateTime

@@ -12,7 +12,7 @@ import mk.ru.shop.utils.AppUserInfo
 import mk.ru.shop.utils.Patterns
 import mk.ru.shop.web.requests.AppUserRegisterRequest
 import mk.ru.shop.web.requests.PasswordChangeRequest
-import mk.ru.shop.web.responses.AppUserRegisterResponse
+import mk.ru.shop.web.responses.user.AppUserRegisterResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder

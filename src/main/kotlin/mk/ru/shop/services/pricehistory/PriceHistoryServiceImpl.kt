@@ -9,7 +9,7 @@ import mk.ru.shop.persistence.repositories.PriceHistoryRepo
 import mk.ru.shop.services.criteria.conditions.Condition
 import mk.ru.shop.utils.CommonFunctions
 import mk.ru.shop.web.requests.PriceHistoryCreateRequest
-import mk.ru.shop.web.responses.PriceHistoryInfoResponse
+import mk.ru.shop.web.responses.pricehistory.PriceHistoryInfoResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page

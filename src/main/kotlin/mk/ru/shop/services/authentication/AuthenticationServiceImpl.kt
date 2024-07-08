@@ -3,7 +3,7 @@ package mk.ru.shop.services.authentication
 import mk.ru.shop.services.token.TokenService
 import mk.ru.shop.services.user.AppUserDetailsService
 import mk.ru.shop.web.requests.AuthenticationRequest
-import mk.ru.shop.web.responses.AuthenticationResponse
+import mk.ru.shop.web.responses.user.AuthenticationResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails

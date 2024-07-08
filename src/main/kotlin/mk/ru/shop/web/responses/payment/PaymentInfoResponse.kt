@@ -1,4 +1,4 @@
-package mk.ru.shop.web.responses
+package mk.ru.shop.web.responses.payment
 
 data class PaymentInfoResponse(
     val product: PaymentProductInfoResponse,

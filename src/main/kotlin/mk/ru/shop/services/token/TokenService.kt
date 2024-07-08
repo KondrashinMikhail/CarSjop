@@ -1,7 +1,7 @@
 package mk.ru.shop.services.token
 
 import java.util.Date
-import mk.ru.shop.web.responses.RefreshTokenResponse
+import mk.ru.shop.web.responses.user.RefreshTokenResponse
 import org.springframework.security.core.userdetails.UserDetails
 
 interface TokenService {

@@ -18,9 +18,9 @@ import mk.ru.shop.utils.CommonFunctions
 import mk.ru.shop.web.requests.PriceHistoryCreateRequest
 import mk.ru.shop.web.requests.ProductCreateRequest
 import mk.ru.shop.web.requests.ProductUpdateRequest
-import mk.ru.shop.web.responses.ProductCreateResponse
-import mk.ru.shop.web.responses.ProductInfoResponse
-import mk.ru.shop.web.responses.ProductUpdateResponse
+import mk.ru.shop.web.responses.product.ProductCreateResponse
+import mk.ru.shop.web.responses.product.ProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductUpdateResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page

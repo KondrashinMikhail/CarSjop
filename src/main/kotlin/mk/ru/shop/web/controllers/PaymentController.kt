@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import java.util.UUID
 import mk.ru.shop.services.payment.PaymentService
 import mk.ru.shop.utils.SwaggerUtils
-import mk.ru.shop.web.responses.PaymentInfoResponse
+import mk.ru.shop.web.responses.payment.PaymentInfoResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

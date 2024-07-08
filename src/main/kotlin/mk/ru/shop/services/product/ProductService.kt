@@ -6,9 +6,9 @@ import mk.ru.shop.persistence.entities.Product
 import mk.ru.shop.services.criteria.conditions.Condition
 import mk.ru.shop.web.requests.ProductCreateRequest
 import mk.ru.shop.web.requests.ProductUpdateRequest
-import mk.ru.shop.web.responses.ProductCreateResponse
-import mk.ru.shop.web.responses.ProductInfoResponse
-import mk.ru.shop.web.responses.ProductUpdateResponse
+import mk.ru.shop.web.responses.product.ProductCreateResponse
+import mk.ru.shop.web.responses.product.ProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductUpdateResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 

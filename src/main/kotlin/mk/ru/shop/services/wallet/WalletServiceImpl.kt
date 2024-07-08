@@ -13,6 +13,7 @@ import mk.ru.shop.persistence.entities.Transaction
 import mk.ru.shop.persistence.entities.Wallet
 import mk.ru.shop.persistence.repositories.WalletRepo
 import mk.ru.shop.utils.AppUserInfo
+import mk.ru.shop.web.responses.wallet.WalletInfoResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -54,6 +55,12 @@ class WalletServiceImpl(
         wallet.transactionsRecipient = wallet.transactionsRecipient!!.plus(transaction)
         walletRepo.save(wallet)
         log.info("Added $amount to wallet - ${wallet.id}")
+    }
+
+    override fun findByAuthenticatedLogin(): WalletInfoResponse {
+        val authenticatedLogin: String = AppUserInfo.getAuthenticatedLogin()
+        return walletMapper.toInfoResponse(walletRepo.findByOwnerLogin(authenticatedLogin)
+            .orElseThrow { ContentNotFoundException("Wallet for user with login - $authenticatedLogin not found") })
     }
 
     override fun findEntityById(id: UUID): Wallet {

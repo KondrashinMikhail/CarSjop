@@ -1,4 +1,4 @@
-package mk.ru.shop.web.responses
+package mk.ru.shop.web.responses.product
 
 data class ProductAppUserInfoResponse(
     val login: String,

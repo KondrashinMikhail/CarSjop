@@ -2,7 +2,7 @@ package mk.ru.shop.mappers
 
 import mk.ru.shop.persistence.entities.PriceHistory
 import mk.ru.shop.web.requests.PriceHistoryCreateRequest
-import mk.ru.shop.web.responses.PriceHistoryInfoResponse
+import mk.ru.shop.web.responses.pricehistory.PriceHistoryInfoResponse
 import org.springframework.stereotype.Component
 
 @Component

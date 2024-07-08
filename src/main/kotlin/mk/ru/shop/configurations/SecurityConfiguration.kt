@@ -45,10 +45,8 @@ class SecurityConfiguration(
         .csrf { it.disable() }
         .authorizeHttpRequests {
             it
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/user/{login}/change-password", "/user/register").permitAll()
-                .requestMatchers("/user/{login}/block", "/user/{login}/restore")
-                .hasAuthority(AppUserRole.ADMIN.role)
+                .requestMatchers("/user/{login}/change-password", "/user/register", "/user/login", "/user/refresh").permitAll()
+                .requestMatchers("/user/{login}/block", "/user/{login}/restore").hasAuthority(AppUserRole.ADMIN.role)
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().fullyAuthenticated()
         }

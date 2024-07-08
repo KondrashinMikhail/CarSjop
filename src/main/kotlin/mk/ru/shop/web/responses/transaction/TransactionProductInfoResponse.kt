@@ -1,4 +1,4 @@
-package mk.ru.shop.web.responses
+package mk.ru.shop.web.responses.transaction
 
 import java.time.LocalDate
 import java.util.UUID

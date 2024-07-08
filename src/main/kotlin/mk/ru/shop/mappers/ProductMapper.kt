@@ -3,11 +3,11 @@ package mk.ru.shop.mappers
 import mk.ru.shop.persistence.entities.Product
 import mk.ru.shop.utils.CommonFunctions
 import mk.ru.shop.web.requests.ProductCreateRequest
-import mk.ru.shop.web.responses.PaymentProductInfoResponse
-import mk.ru.shop.web.responses.ProductCreateResponse
-import mk.ru.shop.web.responses.ProductInfoResponse
-import mk.ru.shop.web.responses.ProductUpdateResponse
-import mk.ru.shop.web.responses.TransactionProductInfoResponse
+import mk.ru.shop.web.responses.payment.PaymentProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductCreateResponse
+import mk.ru.shop.web.responses.product.ProductInfoResponse
+import mk.ru.shop.web.responses.product.ProductUpdateResponse
+import mk.ru.shop.web.responses.transaction.TransactionProductInfoResponse
 import org.springframework.stereotype.Component
 
 @Component

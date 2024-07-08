@@ -10,6 +10,8 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.UuidGenerator
 
 @Entity
@@ -26,9 +28,11 @@ data class Transaction(
     @Column(nullable = false)
     @CreationTimestamp
     var date: LocalDateTime? = LocalDateTime.now(),
-    @ManyToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Wallet::class)
+    @Fetch(FetchMode.JOIN)
     var sender: Wallet? = null,
-    @ManyToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Wallet::class)
+    @Fetch(FetchMode.JOIN)
     var recipient: Wallet? = null,
     @OneToOne(targetEntity = Product::class, fetch = FetchType.LAZY)
     var product: Product? = null

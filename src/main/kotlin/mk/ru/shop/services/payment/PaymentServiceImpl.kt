@@ -19,7 +19,7 @@ import mk.ru.shop.services.user.AppUserService
 import mk.ru.shop.services.wallet.WalletService
 import mk.ru.shop.utils.AppUserInfo
 import mk.ru.shop.utils.CommonFunctions
-import mk.ru.shop.web.responses.PaymentInfoResponse
+import mk.ru.shop.web.responses.payment.PaymentInfoResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

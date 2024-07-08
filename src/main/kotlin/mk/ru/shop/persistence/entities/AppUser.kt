@@ -37,10 +37,4 @@ data class AppUser(
     var products: List<Product>? = null,
     @OneToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY)
     var wallet: Wallet? = null
-//    @OneToMany(targetEntity = Transaction::class, mappedBy = "sender")
-//    @Fetch(FetchMode.JOIN)
-//    var transactionsSender: List<Transaction>? = null,
-//    @OneToMany(targetEntity = Transaction::class, mappedBy = "recipient")
-//    @Fetch(FetchMode.JOIN)
-//    var transactionsRecipient: List<Transaction>? = null
 )

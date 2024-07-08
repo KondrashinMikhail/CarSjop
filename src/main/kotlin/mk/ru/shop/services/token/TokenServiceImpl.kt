@@ -8,7 +8,7 @@ import mk.ru.shop.configurations.JwtProperties
 import mk.ru.shop.enums.TokenType
 import mk.ru.shop.exceptions.TokenException
 import mk.ru.shop.services.user.AppUserDetailsService
-import mk.ru.shop.web.responses.RefreshTokenResponse
+import mk.ru.shop.web.responses.user.RefreshTokenResponse
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 
